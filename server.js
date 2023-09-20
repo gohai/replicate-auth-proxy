@@ -32,6 +32,13 @@ app.use('/', proxy('api.replicate.com', {
   proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
     proxyReqOpts.headers['Authorization'] = 'Token ' + api_token;
     return proxyReqOpts;
+  },
+  userResHeaderDecorator: (headers, userReq, userRes, proxyReq, proxyRes) => {
+    // unset the header since the proxy might be serving on http
+    if (headers['strict-transport-security']) {
+      delete headers['strict-transport-security'];
+    }
+    return headers;
   }
 }));
 
