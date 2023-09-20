@@ -20,6 +20,10 @@ if (!api_token) {
 }
 
 
+app.use(cors({
+  origin: '*'
+}));
+
 app.use('/', proxy('api.replicate.com', {
   filter: (req, res) => {
     return req.path != '/';
@@ -29,10 +33,6 @@ app.use('/', proxy('api.replicate.com', {
     proxyReqOpts.headers['Authorization'] = 'Token ' + api_token;
     return proxyReqOpts;
   }
-}));
-
-app.use(cors({
-  origin: '*'
 }));
 
 app.all('/', (req, res) => {
