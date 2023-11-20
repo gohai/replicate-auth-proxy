@@ -29,6 +29,7 @@ app.use('/', proxy('api.replicate.com', {
     return req.path != '/';
   },
   https: true,
+  limit: '10mb',
   proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
     proxyReqOpts.headers['Authorization'] = 'Token ' + api_token;
     return proxyReqOpts;
