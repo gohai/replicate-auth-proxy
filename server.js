@@ -33,6 +33,19 @@ app.use('/', proxy('api.replicate.com', {
   },
   https: true,
   limit: '10mb',
+  proxyReqBodyDecorator: function(bodyContent, srcReq) {
+    try {
+      let logText = 'Request from ' + srcReq.ip;
+      if (srcReq.headers['x-forwarded-for']) {
+        logText += ', x-forwarded-for ' + srcReq.headers['x-forwarded-for'];
+      }
+      logText += ' at ' + (new Date).toString() + ': ' + bodyContent.toString();
+      console.log(logText);
+      //fs.appendFileSync('log.txt', logText + '\n');
+    } catch (e) {
+    }
+    return bodyContent;
+  },
   proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
     proxyReqOpts.headers['Authorization'] = 'Token ' + api_token;
     return proxyReqOpts;
